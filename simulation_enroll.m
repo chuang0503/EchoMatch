@@ -13,3 +13,4 @@ for i = 1:config.new_user_number
 end
 new_user_enroll_ae = struct2table(new_user_enroll_ae);
 clear i single_user_data single_user_enroll_ae
+

@@ -8,7 +8,7 @@
 % transmits the random matrix for BioHashing back to the UD.
 %
 % Input:
-% new_user_enroll_ud (struct): containing `label`, `feature`,
+% new_user_enroll_ud_to_ae (struct): containing `label`, `feature`,
 % `prob_density`
 % gallery (struct), containing `feature`, `prob_density`
 % config (struct): containing bch/ecc parameter
@@ -21,10 +21,10 @@
 %   `legit_bit_err`, `intrude_bit_err`
 %-------------------------------------------------------------------------
 function new_user_enroll_ae = ...
-    main_enroll_ae(new_user_enroll_ud, gallery, config, runmode)
+    main_enroll_ae(new_user_enroll_ud_to_ae, gallery, config, runmode)
 
 assert(runmode=="compact"|runmode=="analysis", "Define a mode")
-assert(numel(new_user_enroll_ud)==1, "Only enroll one user")
+assert(numel(new_user_enroll_ud_to_ae)==1, "Only enroll one user")
 
 % initiate output struct
 new_user_enroll_ae = struct();
@@ -32,9 +32,9 @@ new_user_enroll_ae = struct();
 % retrieve gallery pdf and configuration
 
 % receive ud data
-label = new_user_enroll_ud.label;
-feature = new_user_enroll_ud.feature;
-pdf = new_user_enroll_ud.prob_density;
+label = new_user_enroll_ud_to_ae.label;
+feature = new_user_enroll_ud_to_ae.feature;
+pdf = new_user_enroll_ud_to_ae.prob_density;
 
 % bioinformation mask
 [bioinfo, bmask] = helper_biofeatmask(pdf,gallery.prob_density,config.renyi_alpha);
@@ -45,7 +45,7 @@ pdf = new_user_enroll_ud.prob_density;
 % quanlity control
 N = size(feature,1);
 intruder_feature = datasample(gallery.feature,N,'Replace',true);
-intruder_hashcode = helper_biohashing_auth(intruder_feature.*bmask, Q);
+intruder_hashcode = helper_biohashing_auth(intruder_feature.*bmask, Q, config.ecc_code_size);
 intruder_bit_err = sum(xor(intruder_hashcode,legit_hashcode), 2);
 
 % fuzzy commitment
