@@ -44,18 +44,18 @@ for i=1:config.gallery_user_number
 end
 
 
-gallery.ceps_feature = helper_fft2ceps(gallery.fft_feature, dataset_info.frequency_vector, ...
+gallery.feature = helper_fft2ceps(gallery.fft_feature, dataset_info.frequency_vector, ...
     config.frequency_range_low, config.frequency_range_high);
-gallery.ceps_feature = gallery.ceps_feature(:,1:config.first_K_cepstrum);
+gallery.feature = gallery.feature(:,1:config.first_K_cepstrum);
 
 % Compute gallery data statistic
-gallery.stat_mean = mean(gallery.ceps_feature);
-gallery.stat_std = std(gallery.ceps_feature) + eps;
+gallery.stat_mean = mean(gallery.feature);
+gallery.stat_std = std(gallery.feature) + eps;
 
-gallery.ceps_feature = (gallery.ceps_feature - gallery.stat_mean) ./ gallery.stat_std;
+gallery.feature = (gallery.feature - gallery.stat_mean) ./ gallery.stat_std;
 
 % estimate gallery data pdf
-[gallery.ceps_prob_density, ~] = helper_pdfest(gallery.ceps_feature);
+[gallery.prob_density, ~] = helper_pdfest(gallery.feature);
 
 % clear temp data
 clear freqVec fs i Nfft selected_feature temp_id
@@ -63,7 +63,7 @@ clear freqVec fs i Nfft selected_feature temp_id
 new_user.UserPool = userPool_shuffled(end-config.new_user_number+1:end);
 
 % enrolled data: must be captured before test data
-new_user.enoll = [];
+new_user.enroll_ud = [];
 
 for i=1:config.new_user_number
 
@@ -85,16 +85,16 @@ for i=1:config.new_user_number
     [enroll_pdf,~] = helper_pdfest(newUserData.feature);
     newUserData.prob_density = enroll_pdf;
 
-    new_user.enoll = [new_user.enoll;newUserData];
+    new_user.enroll_ud = [new_user.enroll_ud;newUserData];
 
 end
-new_user.enoll = struct2table(new_user.enoll);
+new_user.enroll_ud = struct2table(new_user.enroll_ud);
 
 clear ceps enroll_fft_feature enroll_idx enroll_pdf i newUserData user_idx
 
 % authentication data: must be captured after enrollment
 % cont_session authentication
-new_user.cont_auth = [];
+new_user.cont_auth_ud = [];
 
 for i=1:config.new_user_number
 
@@ -113,15 +113,15 @@ for i=1:config.new_user_number
 
     newUserData.feature = (ceps - gallery.stat_mean) ./gallery.stat_std;
 
-    new_user.cont_auth = [new_user.cont_auth;newUserData];
+    new_user.cont_auth_ud = [new_user.cont_auth_ud;newUserData];
 
 end
-new_user.cont_auth = struct2table(new_user.cont_auth);
+new_user.cont_auth_ud = struct2table(new_user.cont_auth_ud);
 
 clear ceps auth_fft_feature auth_idx i newUserData user_idx
 
 % cross_session authentication
-new_user.cross_auth = [];
+new_user.cross_auth_ud = [];
 
 for i=1:config.new_user_number
 
@@ -140,10 +140,10 @@ for i=1:config.new_user_number
 
     newUserData.feature = (ceps - gallery.stat_mean) ./gallery.stat_std;
 
-    new_user.cross_auth = [new_user.cross_auth;newUserData];
+    new_user.cross_auth_ud = [new_user.cross_auth_ud;newUserData];
 
 end
-new_user.cross_auth = struct2table(new_user.cross_auth);
+new_user.cross_auth_ud = struct2table(new_user.cross_auth_ud);
 
 clear ceps auth_fft_feature auth_idx i newUserData user_idx
 

@@ -1,5 +1,5 @@
 % bioHashing enroll
-function [biohash_code, Q, estBER] = helper_biohashing_enroll(feat_batch, code_size)
+function [biohash_code, Q, bit_error] = helper_biohashing_enroll(feat_batch, code_size)
 
 % data size
 enroll_num = size(feat_batch,1);
@@ -16,9 +16,7 @@ quantCode = projectedCode>=0;
 
 biohash_code = sum(quantCode) > (enroll_num/2);
 
-ber = sum(xor(quantCode,biohash_code)) / enroll_num;
-
-estBER = mean(ber);
+bit_error = sum(xor(quantCode,biohash_code), 2);
 
 
 end
