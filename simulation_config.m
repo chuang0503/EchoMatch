@@ -3,9 +3,9 @@ clear;
 config = struct();
 %% simulation configuration
 % data split
-config.gallery_user_number = 20;
+config.gallery_user_number = 22;
 config.new_user_number = 20;
-config.new_user_enroll_size = 10;
+config.new_user_enroll_size = 8;
 %% system configuration
 % feature representation
 config.frequency_range_low = 1000;

@@ -1,4 +1,4 @@
-% main_enroll_ae.m
+% main_enroll_ae.m 
 % This script handles the authentication engine (AE) side
 % of the enrollment phase. It receives the biometric features from the user
 % device (UD), estimates the user's feature probability density function
@@ -7,44 +7,42 @@
 % key for the new user, and finally creates a fuzzy commitment. It also
 % transmits the random matrix for BioHashing back to the UD.
 %
-% Input:
-% new_user_enroll_ud_to_ae (struct): containing `label`, `feature`,
-% `prob_density`
-% gallery (struct), containing `feature`, `prob_density`
-% config (struct): containing bch/ecc parameter
-% runmode: "analysis": generate extra data /"compact": generate needed data
+% Input: 
+% user_data_enroll_ud2ae (struct): containing `label`, `ceps_feature`;
+% gallery_data (struct), containing `feature`, `stat_mean`, `stat_std`,
+% `prob_density`; 
+% config (struct): containing bch/ecc parameter;
 
-% Output:
-% new_user_enroll_ae (struct):
-%   "compact": `label`, `randmatrix`, `key`, `commitment`
-%   "analysis": (extra) `biometric_information`, `feature_mask`, `hashcode`,
-%   `legit_bit_err`, `intrude_bit_err`
+% Output: user_data_enrolled_ae (struct): containing `label`, `randmatrix`,
+% `key`, `commitment`, `gallery_stat_mean`, `gallery_stat_std` ; 
+% analysis (struct): `biometric_information`,
+% `feature_mask`, `hashcode`, `legit_bit_err`, `intrude_bit_err`.
 %-------------------------------------------------------------------------
-function new_user_enroll_ae = ...
-    main_enroll_ae(new_user_enroll_ud_to_ae, gallery, config, runmode)
+function [user_data_enrolled_ae, user_data_enrolled_ud, analysis] = ...
+    main_enroll_ae(user_data_enroll_ud2ae, gallery_data, config)
 
-assert(runmode=="compact"|runmode=="analysis", "Define a mode")
-assert(numel(new_user_enroll_ud_to_ae)==1, "Only enroll one user")
+assert(numel(user_data_enroll_ud2ae)==1, "Only enroll one user each time")
 
-% initiate output struct
-new_user_enroll_ae = struct();
-
-% retrieve gallery pdf and configuration
+% retrieve gallery_data pdf and configuration
 
 % receive ud data
-label = new_user_enroll_ud_to_ae.label;
-feature = new_user_enroll_ud_to_ae.feature;
-pdf = new_user_enroll_ud_to_ae.prob_density;
+label = user_data_enroll_ud2ae.label;
+ceps_feature = user_data_enroll_ud2ae.ceps_feature;
+
+% normalize ceps feaeture
+feature = (ceps_feature - gallery_data.stat_mean) ./ (gallery_data.stat_std +eps);
+
+[pdf,~] = helper_pdfest(feature);
 
 % bioinformation mask
-[bioinfo, bmask] = helper_biofeatmask(pdf,gallery.prob_density,config.renyi_alpha);
+[bioinfo, bmask] = helper_biofeatmask(pdf,gallery_data.prob_density,config.renyi_alpha);
 
 % biohashing
 [legit_hashcode, Q, legit_bit_err] = helper_biohashing_enroll(feature.*bmask, config.ecc_code_size);
 
 % quanlity control
 N = size(feature,1);
-intruder_feature = datasample(gallery.feature,N,'Replace',true);
+intruder_feature = datasample(gallery_data.feature,N,'Replace',true);
 intruder_hashcode = helper_biohashing_auth(intruder_feature.*bmask, Q, config.ecc_code_size);
 intruder_bit_err = sum(xor(intruder_hashcode,legit_hashcode), 2);
 
@@ -52,29 +50,29 @@ intruder_bit_err = sum(xor(intruder_hashcode,legit_hashcode), 2);
 [commitment, key] = helper_FC_enroll(legit_hashcode, config.bch_n, config.bch_k);
 
 % store at server
-% new_user_enroll_ae (struct):
-%   "compact": `label`, `randmatrix`, `key`, `commitment`
-%   "analysis": (extra) `biometric_information`, `feature_mask`, `hashcode`,
-%   `legit_bit_err`, `intrude_bit_err`
-if runmode == "compact"
-    new_user_enroll_ae.label = label;
-    new_user_enroll_ae.randmatrix = Q;
-    new_user_enroll_ae.key = {key};
-    new_user_enroll_ae.commitment = {commitment};
-elseif runmode == "analysis"
-    new_user_enroll_ae.label = label;
-    new_user_enroll_ae.randmatrix = Q;
-    new_user_enroll_ae.key = {key};
-    new_user_enroll_ae.commitment = {commitment};
+user_data_enrolled_ae = struct();
+user_data_enrolled_ae.label = label;
+user_data_enrolled_ae.key = key;
+user_data_enrolled_ae.commitment = commitment;
 
-    new_user_enroll_ae.bioinfo = bioinfo;
-    new_user_enroll_ae.feature_mask = {bmask};
-    new_user_enroll_ae.hashcode = {legit_hashcode};
-    new_user_enroll_ae.legit_bit_err = legit_bit_err;
-    new_user_enroll_ae.intruder_bit_err = intruder_bit_err;
-else
-    disp("Incorrect mode!")
-end
+% store at user
+user_data_enrolled_ud = struct();
+user_data_enrolled_ud.label = label;
+user_data_enrolled_ud.randmatrix = Q;
+user_data_enrolled_ud.feature_mask = bmask;
+user_data_enrolled_ud.gallery_stat_mean = gallery_data.stat_mean;
+user_data_enrolled_ud.gallery_stat_std = gallery_data.stat_std;
+
+
+% saved for further analysis
+analysis = struct();
+analysis.label = label;
+analysis.enroll_pdf = pdf;
+analysis.enroll_bioinfo = bioinfo;
+analysis.enroll_hashcode = legit_hashcode;
+analysis.enroll_legit_bit_err = legit_bit_err;
+analysis.enroll_intruder_bit_err = intruder_bit_err;
+
 end
 
 

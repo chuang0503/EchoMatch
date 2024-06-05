@@ -8,27 +8,41 @@
 % verification.
 %--------------------------------------------------------------------------
 % Input:
-% new_user_auth_ud (struct): containing `label`, `feature`, `randmatrix`,
-% `feature_mask`
+% user_data_auth_ud (struct): containing `label`, `fft_feature`; 
+% user_data_enrolled_ud (struct): containing `randmatrix`, `feature_mask`, 
+% `gallery_stat_mean` `gallery_stat_std`;
 % config (struct): containing `ecc_code_size`
 
 % Output:
-% new_user_auth_ud_to_ae (struct): containing `label`, `hashcode`
+% user_data_auth_ud2ae (struct): containing `label`, `hashcode`
 %--------------------------------------------------------------------------
-function new_user_auth_ud_to_ae = main_auth_ud(new_user_auth_ud, config)
+function user_data_auth_ud2ae = main_auth_ud(user_data_auth_ud, ...
+    user_data_enrolled_ud, config)
 
 % unpack data
-label = new_user_auth_ud.label;
-feature = new_user_auth_ud.feature;
-randmatrix = new_user_auth_ud.randmatrix;
-feature_mask = new_user_auth_ud.feature_mask;
+label = user_data_auth_ud.label;
+fft_feature = user_data_auth_ud.fft_feature;
+frequency_vector = user_data_auth_ud.frequency_vector;
+
+randmatrix = user_data_enrolled_ud.randmatrix;
+feature_mask = user_data_enrolled_ud.feature_mask;
+gallery_stat_mean = user_data_enrolled_ud.gallery_stat_mean;
+gallery_stat_std = user_data_enrolled_ud.gallery_stat_std;
+
+% pre-processing
+ceps_feature = helper_fft2ceps(fft_feature, frequency_vector, ...
+    config.frequency_range_low, config.frequency_range_high, ...
+    config.first_K_cepstrum);
+
+% normalization
+feature = (ceps_feature - gallery_stat_mean) ./ (gallery_stat_std +eps);
 
 % Invariant feature vector + hashing
 hashcode = helper_biohashing_auth(feature .* feature_mask, randmatrix, config.ecc_code_size);
 
 % pack data into struct
-new_user_auth_ud_to_ae = struct();
-new_user_auth_ud_to_ae.label = label;
-new_user_auth_ud_to_ae.hashcode = hashcode;
+user_data_auth_ud2ae = struct();
+user_data_auth_ud2ae.label = label;
+user_data_auth_ud2ae.hashcode = hashcode;
 
 end

@@ -1,16 +1,23 @@
 addpath("helperFnc\")
 addpath("main\")
 
-% enrollment
-new_user_enroll_ae = [];
+user_data_enrolled_ae = [];
+user_data_enrolled_ud = [];
 for i = 1:config.new_user_number
-    single_user_data = table2struct(new_user.enroll_ud(i,:));
+    % enrollment
+    single_user_data_enroll_ud = table2struct(new_user.user_data_enroll_ud(i,:));
+    single_user_data_enroll_ud2ae = main_enroll_ud(single_user_data_enroll_ud,config);
 
-    single_user_enroll_ae = ...
-        main_enroll_ae(single_user_data, gallery, config, "analysis");
+    [single_user_data_enrolled_ae, single_user_data_enrolled_ud, ~] = ...
+        main_enroll_ae(single_user_data_enroll_ud2ae, gallery_data, config);
 
-    new_user_enroll_ae = [new_user_enroll_ae;single_user_enroll_ae];
+    user_data_enrolled_ae = [user_data_enrolled_ae;single_user_data_enrolled_ae];
+    user_data_enrolled_ud = [user_data_enrolled_ud;single_user_data_enrolled_ud];
+
 end
-new_user_enroll_ae = struct2table(new_user_enroll_ae);
-clear i single_user_data single_user_enroll_ae
+user_data_enrolled_ae = struct2table(user_data_enrolled_ae);
+user_data_enrolled_ud = struct2table(user_data_enrolled_ud);
 
+
+clear i single_user_data_enroll_ud single_user_data_enroll_ud2ae
+clear single_user_data_enrolled_ae single_user_data_enrolled_ud
