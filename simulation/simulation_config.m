@@ -1,4 +1,3 @@
-clear;
 %% simulation configuration
 config = struct();
 %% simulation configuration
@@ -6,6 +5,7 @@ config = struct();
 config.gallery_user_number = 22;
 config.new_user_number = 20;
 config.new_user_enroll_size = 8;
+config.intruder_sample_number = 8;
 %% system configuration
 % feature representation
 config.frequency_range_low = 1000;

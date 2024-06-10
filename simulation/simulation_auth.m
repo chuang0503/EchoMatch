@@ -3,6 +3,7 @@
 % addpath("main\")
 %%
 user_data_auth_ud = new_user.cross_auth_ud;
+
 result_table = [];
 for i = 1:config.new_user_number
     % authentication ud
@@ -28,3 +29,4 @@ result_table = struct2table(result_table);
 
 clear i single_user_data_auth_ud single_user_data_enrolled_ud 
 clear single_user_data_auth_ud2ae single_user_auth_decision
+clear result

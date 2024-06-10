@@ -41,7 +41,7 @@ feature = (ceps_feature - gallery_data.stat_mean) ./ (gallery_data.stat_std +eps
 [legit_hashcode, Q, legit_bit_err] = helper_biohashing_enroll(feature.*bmask, config.ecc_code_size);
 
 % quanlity control
-N = size(feature,1);
+N = config.intruder_sample_number;
 intruder_feature = datasample(gallery_data.feature,N,'Replace',true);
 intruder_hashcode = helper_biohashing_auth(intruder_feature.*bmask, Q, config.ecc_code_size);
 intruder_bit_err = sum(xor(intruder_hashcode,legit_hashcode), 2);
