@@ -67,15 +67,15 @@ During authentication, the new biometric data will be compared with the enrolled
 - Stored in the `data` folder
 
 ### Main Scripts
-- `main_develop.m`: Process the gallery data
 - `main_enroll_ud.m`
 - `main_enroll_ae.m`
 - `main_auth_ud.m`
 - `main_auth_ae.m`
 - `main_update.m`: Optional, update the gallery dataset
-- `simulation_data_split.m`: Split the data for simulation
-- `analysis.m`: Feature representation, bioInfo, hashcode
-- `evaluation_efficiency.m`
-- `evaluation_accuracy.m`
-- `evaluation_security.m`
-- `evaluation_robustness.m`
+
+### Simulation Scripts
+- `simulation_config.m`: Set experiment parameters
+- `simulation_data_prep.m`: Split the local dataset into gallery/new user
+- `simulation_enroll.m`: Enroll new user's data
+- `simulation_auth.m`: `cont_auth` and `cross_auth` means data in continuous/different sessions
+- `simulation_result_aggregation.m`: To aggregate multiple trials' performance results
