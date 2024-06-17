@@ -2,7 +2,7 @@
 % addpath("helperFnc\")
 % addpath("main\")
 %%
-user_data_auth_ud = new_user.cross_auth_ud;
+user_data_auth_ud = new_user.cont_auth_ud;
 
 result_table = [];
 for i = 1:config.new_user_number
