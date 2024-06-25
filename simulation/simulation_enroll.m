@@ -18,9 +18,9 @@ for i = 1:config.new_user_number
     enroll_analysis_table = [enroll_analysis_table; analysis];
 
 end
-user_data_enrolled_ae = struct2table(user_data_enrolled_ae);
-user_data_enrolled_ud = struct2table(user_data_enrolled_ud);
-enroll_analysis_table = struct2table(enroll_analysis_table);
+user_data_enrolled_ae = struct2table(user_data_enrolled_ae,'AsArray',true);
+user_data_enrolled_ud = struct2table(user_data_enrolled_ud,'AsArray',true);
+enroll_analysis_table = struct2table(enroll_analysis_table,'AsArray',true);
 
 
 clear i single_user_data_enroll_ud single_user_data_enroll_ud2ae

@@ -81,7 +81,7 @@ for i=1:config.new_user_number
     new_user.user_data_enroll_ud = [new_user.user_data_enroll_ud;newUserData];
 
 end
-new_user.user_data_enroll_ud = struct2table(new_user.user_data_enroll_ud);
+new_user.user_data_enroll_ud = struct2table(new_user.user_data_enroll_ud,'AsArray',true);
 
 clear fft_feature enroll_idx i newUserData user_idx
 
@@ -107,7 +107,7 @@ for i=1:config.new_user_number
     new_user.cont_auth_ud = [new_user.cont_auth_ud;newUserData];
 
 end
-new_user.cont_auth_ud = struct2table(new_user.cont_auth_ud);
+new_user.cont_auth_ud = struct2table(new_user.cont_auth_ud,'AsArray',true);
 
 clear fft_feature auth_idx i newUserData user_idx
 
@@ -131,7 +131,7 @@ for i=1:config.new_user_number
     new_user.cross_auth_ud = [new_user.cross_auth_ud;newUserData];
 
 end
-new_user.cross_auth_ud = struct2table(new_user.cross_auth_ud);
+new_user.cross_auth_ud = struct2table(new_user.cross_auth_ud,'AsArray',true);
 
 clear fft_feature auth_idx i newUserData user_idx
 

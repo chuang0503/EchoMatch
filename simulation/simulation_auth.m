@@ -25,7 +25,7 @@ for i = 1:config.new_user_number
     result_table = [result_table;result];
 
 end
-result_table = struct2table(result_table);
+result_table = struct2table(result_table,'AsArray',true);
 
 clear i single_user_data_auth_ud single_user_data_enrolled_ud 
 clear single_user_data_auth_ud2ae single_user_auth_decision
