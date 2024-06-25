@@ -20,6 +20,7 @@ for i = 1:config.new_user_number
 
     % result
     result = struct();
+    result.hashcode = single_user_data_auth_ud2ae.hashcode;
     result.label = single_user_data_auth_ud.label;
     result.frr = mean(single_user_auth_decision);
     result_table = [result_table;result];
