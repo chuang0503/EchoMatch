@@ -1,13 +1,14 @@
 % to do: visualization
 function [rec,noError] = EarCanalPlay(apr,audioFile,outputLevel)
 %% Device Settings
-% apr = audioPlayerRecorder;
+% apr = audioPlayerRecorder; 
 % apr.Device = "USB Sound Device: Audio (hw:2,0)";
 % apr.SampleRate=48000;
+Device = apr.Device;
 L = apr.BufferSize;
 fs = apr.SampleRate;
-nbPlayCh = 2;			% Total number of playback channels
-nbRecCh = 2;			% Total number of recorder channels
+% nbPlayCh = 2;			% Total number of playback channels
+% nbRecCh = 2;			% Total number of recorder channels
 %% Method Settings (Normal audio content: music/speech)
 afr = dsp.AudioFileReader(audioFile,"SamplesPerFrame",L);
 % Allocate the input/output buffers
@@ -26,7 +27,15 @@ scale = 10^(outputLevel/20);
 % Playback and capture loop
 while ~isDone(afr)
     x = afr();
-    x = [x x] * scale;
+    
+    if size(x,2) == 1
+        x = [x x] * scale;
+    end
+    
+    if size(x,2) == 2
+        x = x * scale;
+    end 
+
     [y,under,over] = apr(x);
     if under>0 || over>0
         noError = false;

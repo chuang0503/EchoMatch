@@ -11,6 +11,7 @@ nbRecCh = 2;			% Total number of recorder channels
 %% Method Settings (MLS)
 
 % outputLevel = -40;		% Excitation Level (dBFS)
+%% Parameter
 
 
 if exc_method == "MLS"
@@ -30,7 +31,7 @@ elseif exc_method == "chirp"
     nbWarmUps = 0;			% Number of warm-up runs
     durationPerRun = 0.55; 	% Duration per Run (s)
     pauseBetween = 0.05;		% Pause between runs (s)
-    sweepRange = [20 24000]; % Sweep start/stop frequency (Hz)
+    sweepRange = [20 22050]; % Sweep start/stop frequency (Hz)
     sweepDur = 0.5;			% Sweep Duration (s)
     irDur = durationPerRun - sweepDur;
     exc = sweeptone( ...
@@ -64,6 +65,7 @@ elseif exc_method == "inaudible"
 end
 %% Prepare the output signal
 % Allocate the input/output buffers
+disp(size(excSequence));
 sequenceLength = size(excSequence,1);
 bufExc = dsp.AsyncBuffer(sequenceLength+L);
 bufRec = dsp.AsyncBuffer(sequenceLength+2*L);
@@ -97,6 +99,7 @@ read(bufRec,L);
 rec = read(bufRec);
 recWithoutSilence = rec(size(startSilence,1)+1:end,:);
 recWithoutSilence = recWithoutSilence(1:nbRunsTotal*size(exc,1),:);
+disp(size(recWithoutSilence));
 % Compute the impulse response of the recording
 ir = impzest(exc,recWithoutSilence,WarmupRuns=nbWarmUps);
 end
