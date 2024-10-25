@@ -2,8 +2,8 @@
 config = struct();
 %% simulation configuration
 % data split
-config.gallery_user_number = 22;
-config.new_user_number = 20;
+config.gallery_user_number = 41;
+config.new_user_number = 1;
 config.new_user_enroll_size = 8;
 config.intruder_sample_number = 8;
 %% system configuration
