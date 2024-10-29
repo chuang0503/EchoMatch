@@ -47,11 +47,11 @@ classdef Authenticator
         function obj = enrollUser(obj, user_name, fr_batch_cell)
             if any(strcmp(obj.enrollment_user_list,user_name))
                 idx = find(strcmp(obj.enrollment_user_list, user_name),1);
-                obj.auth_status = user_name + " is updating his/her enrolled data.";
+                obj.auth_status = user_name + " updates the existing user.\n";
             else
                 idx = length(obj.enrollment_user_list) + 1;
                 obj.enrollment_user_list(idx) = user_name;
-                obj.auth_status = user_name + " is a new user. Enrolling.";
+                obj.auth_status = user_name + " enrolls as new user.\n";
             end
 
             % convert to ceps feature (left ear)
@@ -95,7 +95,7 @@ classdef Authenticator
             if any(obj.enrollment_user_list==current_user_name)
                 idx = find(obj.enrollment_user_list==current_user_name,1);
             else
-                obj.auth_status = current_user_name + " not found. Please enroll.";
+                obj.auth_status = current_user_name + " is not an enrolled user\n.";
                 return
             end
 
@@ -145,9 +145,9 @@ classdef Authenticator
 
 
             if result_aggregate
-                obj.auth_status = current_user_name + " successfully logged in!";
+                obj.auth_status = current_user_name + " successfully logged in!\n";
             else
-                obj.auth_status = current_user_name + " authentication fails!";
+                obj.auth_status = current_user_name + " authentication fails\n!";
             end
         end            
 
