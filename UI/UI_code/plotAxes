@@ -1,0 +1,57 @@
+function PlotEarReflectance(app)
+            % 检查 user_ir_MLS 是否为空
+            if isempty(app.user_ir)
+                disp('Error: No data to plot.');
+                return;
+            end
+
+            data_ir = app.user_ir{1};
+            % 确保数据非空，并且检查其维度
+            if size(data_ir, 2) == 1
+            % 单声道处理
+                data_ir_left = data_ir(:, 1);
+                fs = app.aPR.SampleRate;
+                Nfft = 2^ceil(log2(size(data_ir, 1)));
+                [fr_left, freq] = freqz(data_ir_left, 1, Nfft, fs);
+
+                % 绘制左声道（单声道）
+                plot(app.UIAxes, log(freq), fr_left);
+                hold(app.UIAxes, 'on');
+                grid(app.UIAxes, 'on');
+                xlabel(app.UIAxes, 'Frequency (Hz)');
+                ylabel(app.UIAxes, 'Reflectance (dB)');
+
+            elseif size(data_ir, 2) >= 2
+            % 双声道处理
+                data_ir_left = data_ir(:, 1);
+                data_ir_right = data_ir(:, 2);
+                fs = app.aPR.SampleRate;
+                Nfft = 2^ceil(log2(size(data_ir, 1)));
+
+                % 计算左声道频率响应
+                [fr_left, freq] = freqz(data_ir_left, 1, Nfft, fs);
+                % 计算右声道频率响应
+                [fr_right, ~] = freqz(data_ir_right, 1, Nfft, fs);
+
+                % 绘制左声道
+                plot(app.UIAxes, log(freq), fr_left);
+                hold(app.UIAxes, 'on');
+                grid(app.UIAxes, 'on');
+                xlabel(app.UIAxes, 'Frequency (Hz)');
+                ylabel(app.UIAxes, 'Reflectance (dB)');
+
+                % 绘制右声道
+                plot(app.UIAxes_2, log(freq), fr_right);
+                hold(app.UIAxes_2, 'on');
+                grid(app.UIAxes_2, 'on');
+                xlabel(app.UIAxes_2, 'Frequency (Hz)');
+                ylabel(app.UIAxes_2, 'Reflectance (dB)');
+            else
+                disp('Error: Invalid data format.');
+            end
+        end
+
+        function ClearEarReflectance(app)
+            cla(app.UIAxes);
+            cla(app.UIAxes_2);
+        end
