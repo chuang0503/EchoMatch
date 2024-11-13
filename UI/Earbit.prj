@@ -1,0 +1,93 @@
+<deployment-project plugin="plugin.apptool" plugin-version="1.0">
+  <configuration build-checksum="393023865" file="/home/c3-lab/EchoMatch/UI/Earbit.prj" location="/home/c3-lab/EchoMatch/UI" name="Earbit" target="target.mlapps" target-name="Package App">
+    <param.appname>Earbit</param.appname>
+    <param.authnamewatermark>Chenpei Huang, Lingfeng Yao</param.authnamewatermark>
+    <param.email />
+    <param.company>University of Houston</param.company>
+    <param.icon />
+    <param.icons />
+    <param.summary />
+    <param.description />
+    <param.screenshot>/tmp/tp27523c4b_c476_460b_ba1a_e61770fe02dc.png</param.screenshot>
+    <param.version>1.0</param.version>
+    <param.products.name />
+    <param.products.id />
+    <param.products.version />
+    <param.platforms />
+    <param.output>${PROJECT_ROOT}</param.output>
+    <param.guid>eb1bbad9-335d-46ef-b62d-9685b438330b</param.guid>
+    <unset>
+      <param.email />
+      <param.icon />
+      <param.icons />
+      <param.summary />
+      <param.description />
+      <param.version />
+      <param.products.name />
+      <param.products.id />
+      <param.products.version />
+      <param.platforms />
+      <param.output />
+    </unset>
+    <fileset.main>
+      <file>${PROJECT_ROOT}/in_ear_test_v3.mlapp</file>
+    </fileset.main>
+    <fileset.depfun>
+      <file>${PROJECT_ROOT}/UI_code/AcousticScanner.m</file>
+      <file>${PROJECT_ROOT}/UI_code/Authenticator.m</file>
+      <file>${PROJECT_ROOT}/UI_code/FeatureProcessor.m</file>
+      <file>${PROJECT_ROOT}/UI_code/audioPlay/EarCanalPlay.m</file>
+      <file>${PROJECT_ROOT}/UI_code/audioPlay/EarCanalScan.m</file>
+      <file>${PROJECT_ROOT}/UI_code/helperFnc/helper_FC_enroll.m</file>
+      <file>${PROJECT_ROOT}/UI_code/helperFnc/helper_biofeatmask.m</file>
+      <file>${PROJECT_ROOT}/UI_code/helperFnc/helper_biohashing_auth.m</file>
+      <file>${PROJECT_ROOT}/UI_code/helperFnc/helper_biohashing_enroll.m</file>
+      <file>${PROJECT_ROOT}/UI_code/helperFnc/helper_fft2ceps.m</file>
+      <file>${PROJECT_ROOT}/UI_code/helperFnc/helper_pdfest.m</file>
+      <file>${PROJECT_ROOT}/UI_code/helperFnc/renyi_div.m</file>
+      <file>${PROJECT_ROOT}/UI_code/preCalculate/fp_setup.mat</file>
+      <file>${PROJECT_ROOT}/img/EarID.png</file>
+      <file>${PROJECT_ROOT}/img/hearing.png</file>
+      <file>${PROJECT_ROOT}/img/left_ear.png</file>
+      <file>${PROJECT_ROOT}/img/logo1.png</file>
+      <file>${PROJECT_ROOT}/img/refresh.png</file>
+      <file>${PROJECT_ROOT}/img/right_ear.png</file>
+      <file>${PROJECT_ROOT}/img/scanner.png</file>
+      <file>${PROJECT_ROOT}/img/uh_red.png</file>
+      <file>${PROJECT_ROOT}/img/update.png</file>
+      <file>${PROJECT_ROOT}/img/voice-recognition.png</file>
+    </fileset.depfun>
+    <fileset.resources />
+    <fileset.package />
+    <build-deliverables>
+      <file location="/home/c3-lab/EchoMatch" name="UI" optional="false">/home/c3-lab/EchoMatch/UI</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>/usr/local/MATLAB/R2023b</root>
+      <toolboxes>
+        <toolbox name="neuralnetwork" />
+      </toolboxes>
+      <toolbox>
+        <neuralnetwork>
+          <enabled>true</enabled>
+        </neuralnetwork>
+      </toolbox>
+    </matlab>
+    <platform>
+      <unix>true</unix>
+      <mac>false</mac>
+      <windows>false</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>true</linux>
+      <solaris>false</solaris>
+      <osver>5.4.0-150-generic</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>glnxa64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>
